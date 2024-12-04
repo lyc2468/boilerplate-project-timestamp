@@ -23,6 +23,26 @@ app.get("/", function (req, res) {
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
+app.get("/api/:date", function (req, res) {
+  if (isNaN(req.params.date)) {
+    unix = Date.parse(req.params.date);
+    utc = new Date(unix).toUTCString();
+    if (utc == "Invalid Date") {
+      res.json({error: utc});
+      return;
+    }
+  } else {
+    unix = Number(req.params.date);
+    date = new Date(unix);
+    utc = date.toUTCString();
+  }
+  res.json({unix: unix, utc: utc});
+});
+
+app.get("/api/", function (req, res) {
+  date = new Date();
+  res.json({unix: Date.now(), utc: date.toUTCString()});
+});
 
 
 
